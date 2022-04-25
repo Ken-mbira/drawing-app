@@ -1,7 +1,10 @@
 package devmbira.mobile.kidsdrawingapp
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +12,9 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.google.android.material.slider.RangeSlider
@@ -18,6 +24,21 @@ class MainActivity : AppCompatActivity() {
     private var drawingView:DrawingView? = null
     private var mBrushSizeSliderValue:Float = 10.0F
     private var mImageButtonCurrentPaint:ImageButton? = null
+    private var mImageChooserButton:ImageButton? = null
+
+    private val requestPermissionLauncher :ActivityResultLauncher<String> = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ){ isGranted ->
+        if(isGranted) {
+            Toast.makeText(
+                this,
+                "this was granted",
+                Toast.LENGTH_LONG
+            ).show()
+        }else{
+            Toast.makeText(this,"this is very important for the machine to work",Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +54,14 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getDrawable(this,R.drawable.pallete_pressed)
         )
 
-        val ib_brush : ImageButton = findViewById(R.id.ib_brush)
-
-        ib_brush.setOnClickListener{
+        val ibBrush : ImageButton = findViewById(R.id.ib_brush)
+        ibBrush.setOnClickListener{
             showBrushSizeChooserSlider()
+        }
+
+        mImageChooserButton = findViewById(R.id.ib_image_chooser)
+        mImageChooserButton?.setOnClickListener {
+                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
     }
