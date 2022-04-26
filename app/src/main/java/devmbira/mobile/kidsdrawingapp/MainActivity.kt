@@ -5,13 +5,16 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -27,6 +30,16 @@ class MainActivity : AppCompatActivity() {
     private var mBrushSizeSliderValue:Float = 10.0F
     private var mImageButtonCurrentPaint:ImageButton? = null
     private var mImageChooserButton:ImageButton? = null
+
+    private val openGalleryLauncher : ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            result ->
+            if(result.resultCode == RESULT_OK && result.data!=null){
+                val imageBackGround : ImageView = findViewById(R.id.iv_background)
+
+                imageBackGround.setImageURI(result.data?.data)
+            }
+        }
 
     private fun showExternalStorageDialog() {
         val builder = AlertDialog.Builder(this)
@@ -54,11 +67,10 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission()
     ){ isGranted ->
         if(isGranted) {
-            Toast.makeText(
-                this,
-                "thankyu",
-                Toast.LENGTH_LONG
-            ).show()
+            val pickIntent = Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+            openGalleryLauncher.launch(pickIntent)
         }else{
             showExternalStorageDialog()
         }
