@@ -28,17 +28,39 @@ class MainActivity : AppCompatActivity() {
     private var mImageButtonCurrentPaint:ImageButton? = null
     private var mImageChooserButton:ImageButton? = null
 
+    private fun showExternalStorageDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.apply {
+            setPositiveButton("I've changed my mind",
+                    DialogInterface.OnClickListener {dialog,_ ->
+                        dialog.dismiss()
+                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+
+            })
+
+            setNegativeButton("I stand by my choice",
+                    DialogInterface.OnClickListener{dialog,_ ->
+                        dialog.cancel()
+                    })
+        }
+        builder.setTitle("External Storage Access")
+        builder.setMessage("Without this permission, you will not be able to access the image files required for the background!")
+        val alertDialog:AlertDialog = builder.create()
+        alertDialog.show()
+
+    }
+
     private val requestPermissionLauncher :ActivityResultLauncher<String> = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ){ isGranted ->
         if(isGranted) {
             Toast.makeText(
                 this,
-                "this was granted",
+                "thankyu",
                 Toast.LENGTH_LONG
             ).show()
         }else{
-            Toast.makeText(this,"this is very important for the machine to work",Toast.LENGTH_LONG).show()
+            showExternalStorageDialog()
         }
     }
 
