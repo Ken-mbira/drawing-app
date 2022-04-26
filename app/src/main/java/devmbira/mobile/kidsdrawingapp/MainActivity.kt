@@ -66,6 +66,14 @@ class MainActivity : AppCompatActivity() {
                 DialogInterface.OnClickListener{dialog,_ ->
                     dialog.cancel()
                 })
+            .setOnCancelListener{
+                if(drawingView!!.run {
+                            getSizeForBrush() < 100.00 &&
+                            getSizeForBrush() > 10.00
+                    }){
+                    mBrushSizeSliderValue = drawingView!!.getSizeForBrush()
+                }
+            }
 
         val alertDialog:AlertDialog = builder.create()
         alertDialog.setCancelable(true)
