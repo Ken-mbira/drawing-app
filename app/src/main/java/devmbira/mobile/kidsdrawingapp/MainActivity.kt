@@ -2,7 +2,9 @@ package devmbira.mobile.kidsdrawingapp
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +42,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun brushSizeDialogFunction(){
+        val builder = AlertDialog.Builder(this)
+        var placeholderWidth:Float = 0.0F
+
+        val rootView = this.layoutInflater.inflate(R.layout.slider_brush_size,null)
+        val brushSizeSlider : Slider? = rootView.findViewById(R.id.brush_slider)
+        brushSizeSlider?.value = mBrushSizeSliderValue
+        brushSizeSlider?.addOnChangeListener{
+                _,value,_ ->
+            mBrushSizeSliderValue = value
+        }
+
+        builder.setView(rootView)
+            .setTitle("Choose your brush size")
+            .setIcon(R.drawable.img)
+            .setPositiveButton("Ok",
+                DialogInterface.OnClickListener{dialog,_ ->
+                    drawingView?.setSizeForBrush(mBrushSizeSliderValue)
+                    dialog.dismiss()
+                })
+            .setNegativeButton("Cancel",
+                DialogInterface.OnClickListener{dialog,_ ->
+                    dialog.cancel()
+                })
+
+        val alertDialog:AlertDialog = builder.create()
+        alertDialog.setCancelable(true)
+        alertDialog.show()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,14 +88,13 @@ class MainActivity : AppCompatActivity() {
 
         val ibBrush : ImageButton = findViewById(R.id.ib_brush)
         ibBrush.setOnClickListener{
-            showBrushSizeChooserSlider()
+            brushSizeDialogFunction()
         }
 
         mImageChooserButton = findViewById(R.id.ib_image_chooser)
         mImageChooserButton?.setOnClickListener {
                 requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
-
     }
     private fun showBrushSizeChooserDialog(){
         val brushDialog = Dialog(this)
