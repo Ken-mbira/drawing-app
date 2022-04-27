@@ -138,53 +138,6 @@ class MainActivity : AppCompatActivity() {
                 requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     }
-    private fun showBrushSizeChooserDialog(){
-        val brushDialog = Dialog(this)
-        brushDialog.setContentView(R.layout.dialog_brush_size)
-        brushDialog.setTitle("Brush Size: ")
-        val smallBtn:ImageButton = brushDialog.findViewById(R.id.ib_small_brush)
-        val mediumBtn:ImageButton = brushDialog.findViewById(R.id.ib_medium_brush)
-        val largeBtn:ImageButton = brushDialog.findViewById(R.id.ib_large_brush)
-        smallBtn.setOnClickListener {
-            drawingView?.setSizeForBrush(10.toFloat())
-            brushDialog.dismiss()
-        }
-        mediumBtn.setOnClickListener {
-            drawingView?.setSizeForBrush(20.toFloat())
-            brushDialog.dismiss()
-        }
-        largeBtn.setOnClickListener {
-            drawingView?.setSizeForBrush(30.toFloat())
-            brushDialog.dismiss()
-        }
-        brushDialog.show()
-    }
-
-    private fun showBrushSizeChooserSlider(){
-        val brushDialog = Dialog(this)
-        brushDialog.setContentView(R.layout.slider_brush_size)
-        brushDialog.setTitle("Brush size:")
-        val brushSlider: Slider = brushDialog.findViewById(R.id.brush_slider)
-        brushSlider.value = mBrushSizeSliderValue
-        brushSlider.addOnSliderTouchListener(object :
-        Slider.OnSliderTouchListener {
-            @SuppressLint("RestrictedApi")
-            override fun onStartTrackingTouch(slider: Slider) {
-            }
-
-            @SuppressLint("RestrictedApi")
-            override fun onStopTrackingTouch(slider: Slider) {
-                brushDialog.dismiss()
-            }
-
-        })
-        brushSlider.addOnChangeListener{
-            _,value,_ ->
-            drawingView?.setSizeForBrush(value)
-            mBrushSizeSliderValue = value
-        }
-        brushDialog.show()
-    }
 
     fun paintClicked(view: View){
         if(view !== mImageButtonCurrentPaint){
