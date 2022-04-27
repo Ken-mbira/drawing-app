@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private var mImageButtonCurrentPaint:ImageButton? = null
     private var mImageChooserButton:ImageButton? = null
     private var imageBackground : ImageView? = null
+    private var progressDialog : Dialog? = null
 
     private val openGalleryLauncher : ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
@@ -182,6 +183,7 @@ class MainActivity : AppCompatActivity() {
                     this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 ) -> {
+                    launchProgressDialog()
                     lifecycleScope.launch {
                         val flDrawingView : FrameLayout = findViewById(R.id.fl_drawing_view_container)
                         saveBitmapFile(getBitmapFromView(flDrawingView))
@@ -251,6 +253,7 @@ class MainActivity : AppCompatActivity() {
                     result = f.absolutePath
                     runOnUiThread {
                         if (!result.isEmpty()) {
+                            cancelProgressDialog()
                             Toast.makeText(
                                 this@MainActivity,
                                 "File saved successfully :$result",
@@ -271,5 +274,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return result
+    }
+
+    private fun launchProgressDialog(){
+        progressDialog = Dialog(this@MainActivity)
+
+        progressDialog?.setContentView(R.layout.custom_progress_dialog)
+        progressDialog?.show()
+
+    }
+    private fun cancelProgressDialog(){
+        if(progressDialog!=null){
+            progressDialog?.dismiss()
+            progressDialog = null
+        }
     }
 }
