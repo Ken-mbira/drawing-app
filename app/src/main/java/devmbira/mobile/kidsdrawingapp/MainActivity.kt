@@ -66,13 +66,13 @@ class MainActivity : AppCompatActivity() {
     private val requestPermissionLauncher :ActivityResultLauncher<String> = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ){ isGranted ->
-        if(isGranted) {
+        if(!isGranted) {
+            showExternalStorageDialog()
+        }else{
             val pickIntent = Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
             openGalleryLauncher.launch(pickIntent)
-        }else{
-            showExternalStorageDialog()
         }
     }
 
@@ -135,7 +135,20 @@ class MainActivity : AppCompatActivity() {
 
         mImageChooserButton = findViewById(R.id.ib_image_chooser)
         mImageChooserButton?.setOnClickListener {
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            when (PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) -> {
+                    val pickIntent = Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+                    openGalleryLauncher.launch(pickIntent)
+                }
+                else -> {
+                    requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                }
+            }
         }
     }
 
