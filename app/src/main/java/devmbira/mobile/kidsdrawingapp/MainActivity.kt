@@ -47,7 +47,10 @@ class MainActivity : AppCompatActivity() {
             setPositiveButton("I've changed my mind",
                     DialogInterface.OnClickListener {dialog,_ ->
                         dialog.dismiss()
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                requestPermissionLauncher.launch(arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                ))
 
             })
 
@@ -57,23 +60,21 @@ class MainActivity : AppCompatActivity() {
                     })
         }
         builder.setTitle("External Storage Access")
-        builder.setMessage("Without this permission, you will not be able to access the image files required for the background!")
+        builder.setMessage("Without this permissions, you will not be able to utilise the applications storage functionality")
         val alertDialog:AlertDialog = builder.create()
         alertDialog.show()
 
     }
 
-    private val requestPermissionLauncher :ActivityResultLauncher<String> = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ){ isGranted ->
-        if(!isGranted) {
+    private val requestPermissionLauncher :ActivityResultLauncher<Array<String>> = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ){ permissionStatus -> permissionStatus.entries.forEach{
+        val permissionName = it.key
+        val isGranted = it.value
+        if(!isGranted){
             showExternalStorageDialog()
-        }else{
-            val pickIntent = Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-
-            openGalleryLauncher.launch(pickIntent)
         }
+    }
     }
 
     private fun brushSizeDialogFunction(){
@@ -146,7 +147,10 @@ class MainActivity : AppCompatActivity() {
                     openGalleryLauncher.launch(pickIntent)
                 }
                 else -> {
-                    requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    requestPermissionLauncher.launch(arrayOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    ))
                 }
             }
         }
