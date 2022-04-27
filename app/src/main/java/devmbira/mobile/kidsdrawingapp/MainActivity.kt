@@ -134,6 +134,16 @@ class MainActivity : AppCompatActivity() {
             brushSizeDialogFunction()
         }
 
+        val ibUndo : ImageButton = findViewById(R.id.ib_undo)
+        ibUndo.setOnClickListener{
+            drawingView?.undoOnClick()
+        }
+
+        val ibRedo : ImageButton = findViewById(R.id.ib_redo)
+        ibRedo.setOnClickListener{
+            drawingView?.redoOnClick()
+        }
+
         mImageChooserButton = findViewById(R.id.ib_image_chooser)
         mImageChooserButton?.setOnClickListener {
             when (PackageManager.PERMISSION_GRANTED) {

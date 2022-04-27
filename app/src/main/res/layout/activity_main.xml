@@ -156,6 +156,22 @@
             android:src="@drawable/image_chooser_icon"
             android:scaleType="fitXY"
             />
+        <ImageButton
+            android:id="@+id/ib_undo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/undo_icon"
+            android:scaleType="fitXY"
+            />
+        <ImageButton
+        android:id="@+id/ib_redo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:src="@drawable/redo_icon"
+        android:scaleType="fitXY"
+        />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
