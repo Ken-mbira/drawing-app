@@ -23,7 +23,6 @@
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/image_bg"
             />
         <devmbira.mobile.kidsdrawingapp.DrawingView
             android:id="@+id/drawing_view"
@@ -172,6 +171,14 @@
         android:src="@drawable/redo_icon"
         android:scaleType="fitXY"
         />
+        <ImageButton
+            android:id="@+id/ib_store"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/storage_icon"
+            android:scaleType="fitXY"
+            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

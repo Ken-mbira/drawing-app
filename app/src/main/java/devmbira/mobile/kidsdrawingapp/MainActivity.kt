@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -30,14 +31,14 @@ class MainActivity : AppCompatActivity() {
     private var mBrushSizeSliderValue:Float = 10.0F
     private var mImageButtonCurrentPaint:ImageButton? = null
     private var mImageChooserButton:ImageButton? = null
+    private var imageBackground : ImageView? = null
 
     private val openGalleryLauncher : ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result ->
             if(result.resultCode == RESULT_OK && result.data!=null){
-                val imageBackGround : ImageView = findViewById(R.id.iv_background)
-
-                imageBackGround.setImageURI(result.data?.data)
+                imageBackground = findViewById(R.id.iv_background)
+                imageBackground?.setImageURI(result.data?.data)
             }
         }
 
@@ -121,6 +122,9 @@ class MainActivity : AppCompatActivity() {
 
         drawingView = findViewById(R.id.drawing_view)
         drawingView?.setSizeForBrush(20.toFloat())
+
+        imageBackground = findViewById<ImageView?>(R.id.iv_background)
+        imageBackground?.setBackgroundColor(Color.WHITE)
 
         val linearLayoutPaintColors:LinearLayout = findViewById(R.id.ll_paint_colors)
 
